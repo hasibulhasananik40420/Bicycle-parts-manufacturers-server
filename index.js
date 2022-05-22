@@ -21,6 +21,7 @@ async function run() {
     try {
       await client.connect();
       const productsCollection = client.db("users").collection("products")
+      const reviewCollection = client.db("users").collection("review")
       console.log('db cnnected');
 
       //all products
@@ -28,6 +29,21 @@ async function run() {
           const products = await productsCollection.find().toArray()
           res.send(products)
       })
+
+    //   add review on server
+    app.post('/review', async(req,res)=>{
+        const review = req.body 
+        const result =await reviewCollection.insertOne(review) 
+        res.send(result)
+    })
+
+    //single review show in dislpay
+    app.get('/review' , async(req,res)=>{
+        const query ={}
+        const cursor =  reviewCollection.find(query)
+        const result = await cursor.toArray()
+        res.send(result)
+    })
   
     } 
     
