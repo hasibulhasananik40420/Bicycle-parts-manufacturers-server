@@ -11,7 +11,7 @@ app.use(express.json())
 //assignment-12
 
  
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASS}@cluster0.uffti.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -22,13 +22,23 @@ async function run() {
       await client.connect();
       const productsCollection = client.db("users").collection("products")
       const reviewCollection = client.db("users").collection("review")
+      const userCollection = client.db("users").collection("user")
       console.log('db cnnected');
 
       //all products
       app.get('/products' , async(req,res)=>{
-          const products = await productsCollection.find().toArray()
+          const products = await (await productsCollection.find().toArray()).reverse()
           res.send(products)
       })
+
+      //single product  displayed
+       app.get('/products/:id', async(req,res)=>{
+           const id = req.params.id 
+           const query = {_id: ObjectId(id)}
+           const result =await productsCollection.findOne(query) 
+           res.send(result)
+
+       })
 
     //   add review on server
     app.post('/review', async(req,res)=>{
@@ -44,6 +54,20 @@ async function run() {
         const result = await cursor.toArray()
         res.send(result)
     })
+
+    //  reg ,login user info
+    app.put('/user/:email', async(req,res)=>{
+        const email = req.params.email 
+        const user = req.body
+        const filter = {email:email} 
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: user
+          };
+          const result = await userCollection.updateOne(filter, updateDoc, options);
+          res.send(result)
+    })
+    
   
     } 
     
