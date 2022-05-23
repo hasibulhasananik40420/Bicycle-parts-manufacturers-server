@@ -58,9 +58,16 @@ async function run() {
 
       //all products
       app.get('/products' , async(req,res)=>{
-          const products = await (await productsCollection.find().toArray()).reverse()
+          const products = await ( productsCollection.find().toArray())
           res.send(products)
       })
+
+      //add products server 
+        app.post('/products' , async(req,res)=>{
+          const product = req.body 
+          const result = await productsCollection.insertOne(product) 
+          res.send(result)
+        })
 
       //single product  displayed
        app.get('/products/:id', async(req,res)=>{
