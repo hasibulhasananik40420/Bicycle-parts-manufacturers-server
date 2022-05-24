@@ -58,7 +58,7 @@ async function run() {
 
       //all products
       app.get('/products' , async(req,res)=>{
-          const products = await ( productsCollection.find().toArray())
+          const products = await  productsCollection.find().toArray()
           res.send(products)
       })
 
@@ -140,6 +140,14 @@ app.put('/user/admin/:email',verifyJWT, async(req,res)=>{
    }
  
 })
+
+   //delete product by admin
+   app.delete('products/:id' , async(req,res)=>{
+     const id = req.params.id 
+     const query = {_id: ObjectId(id)}
+     const result = await productsCollection.deleteOne(query) 
+     res.send(result)
+   })
 
 
   
