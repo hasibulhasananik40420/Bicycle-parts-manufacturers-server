@@ -40,6 +40,7 @@ async function run() {
       const productsCollection = client.db("users").collection("products")
       const reviewCollection = client.db("users").collection("review")
       const userCollection = client.db("users").collection("user")
+      const myProfilCollection = client.db("users").collection("myprofil")
       console.log('db cnnected');
 
        
@@ -142,13 +143,20 @@ app.put('/user/admin/:email',verifyJWT, async(req,res)=>{
 })
 
    //delete product by admin
-   app.delete('products/:id' , async(req,res)=>{
+   app.delete('/products/:id' , async(req,res)=>{
      const id = req.params.id 
      const query = {_id: ObjectId(id)}
      const result = await productsCollection.deleteOne(query) 
      res.send(result)
    })
 
+
+    //my profil add to server
+     app.post('/myprofil' , async(req,res)=>{
+       const profil = req.body 
+       const result = await myProfilCollection.insertOne(profil) 
+       res.send(result)
+     })
 
   
     } 
