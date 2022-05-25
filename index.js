@@ -79,7 +79,10 @@ async function run() {
 
       //  order show in website
 
-      
+      app.get('/myorder', async(req,res)=>{
+        const order = await myOrderCollection.find().toArray()
+        res.send(order)
+      })
 
 
       //single product  displayed
