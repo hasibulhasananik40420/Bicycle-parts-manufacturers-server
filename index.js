@@ -39,7 +39,7 @@ async function run() {
       const reviewCollection = client.db("users").collection("review")
       const userCollection = client.db("users").collection("user")
       const myProfilCollection = client.db("users").collection("myprofil")
-      const myOrderCollection = client.db("users").collection("myorder")
+      const orderCollection = client.db("users").collection("order")
       console.log('db cnnected');
 
        
@@ -68,21 +68,32 @@ async function run() {
           const result = await productsCollection.insertOne(product) 
           res.send(result)
         })
-
+  /////////////////////////////////////////////////////////////////////
 
        // sent order to server
-       app.post('/myorder', async(req,res)=>{
+       app.post('/orders', async(req,res)=>{
          const myorder= req.body 
-         const result = await myOrderCollection.insertOne(myorder) 
+         const result = await orderCollection.insertOne(myorder) 
          res.send(result)
        })
 
-      //  order show in website
+      // all order show in website
 
-      app.get('/myorder', async(req,res)=>{
-        const order = await myOrderCollection.find().toArray()
+      app.get('/orders', async(req,res)=>{
+        const order = await orderCollection.find().toArray()
         res.send(order)
       })
+
+
+       app.get('/myorders' , async(req,res)=>{
+         const email = req.query.email 
+         const query = {email: email}
+         const cursor = orderCollection.find(query)
+         const result = await cursor.toArray()
+         res.send(result)
+       })
+
+///////////////////////////////////////////////////////////////////////
 
 
       //single product  displayed
