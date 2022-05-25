@@ -68,7 +68,7 @@ async function run() {
           const result = await productsCollection.insertOne(product) 
           res.send(result)
         })
-  /////////////////////////////////////////////////////////////////////
+  
 
        // sent order to server
        app.post('/orders', async(req,res)=>{
@@ -93,7 +93,17 @@ async function run() {
          res.send(result)
        })
 
-///////////////////////////////////////////////////////////////////////
+
+        //delete my order
+      app.delete('/myorders/:id',verifyJWT, async(req,res)=>{
+        const id = req.params.id 
+        const query = {_id: ObjectId(id)}
+        const result = await orderCollection.deleteOne(query) 
+        res.send(result)
+      })
+
+       
+
 
 
       //single product  displayed
