@@ -7,10 +7,8 @@ const port = process.env.PORT || 5000
 app.use(cors())
 app.use(express.json())
 
-// pw : vDZGxrn8dT1gJ0tY
-//assignment-12
 
- 
+
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASS}@cluster0.uffti.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -41,6 +39,7 @@ async function run() {
       const reviewCollection = client.db("users").collection("review")
       const userCollection = client.db("users").collection("user")
       const myProfilCollection = client.db("users").collection("myprofil")
+      const myOrderCollection = client.db("users").collection("myorder")
       console.log('db cnnected');
 
        
@@ -69,6 +68,19 @@ async function run() {
           const result = await productsCollection.insertOne(product) 
           res.send(result)
         })
+
+
+       // sent order to server
+       app.post('/myorder', async(req,res)=>{
+         const myorder= req.body 
+         const result = await myOrderCollection.insertOne(myorder) 
+         res.send(result)
+       })
+
+      //  order show in website
+
+      
+
 
       //single product  displayed
        app.get('/products/:id', async(req,res)=>{
@@ -143,7 +155,7 @@ app.put('/user/admin/:email',verifyJWT, async(req,res)=>{
 })
 
    //delete product by admin
-   app.delete('/products/:id' , async(req,res)=>{
+   app.delete('/products/:id',verifyJWT, async(req,res)=>{
      const id = req.params.id 
      const query = {_id: ObjectId(id)}
      const result = await productsCollection.deleteOne(query) 
