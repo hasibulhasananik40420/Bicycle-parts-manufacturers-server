@@ -59,8 +59,13 @@ async function run() {
 
       //all products
       app.get('/products' , async(req,res)=>{
-          const products = await  productsCollection.find().toArray()
-          res.send(products)
+          // const products = await  productsCollection.find().toArray()
+          // res.send(products)
+
+          const query = {};
+            const cursor = productsCollection.find(query);
+            const result = (await cursor.toArray()).reverse()
+            res.send(result)
       })
 
       //add products server 
