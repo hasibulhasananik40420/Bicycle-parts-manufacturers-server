@@ -59,7 +59,6 @@ async function run() {
 
       //all products
       app.get('/products' , async(req,res)=>{
-
           const query = {};
             const cursor = productsCollection.find(query);
             const result = (await cursor.toArray()).reverse()
@@ -239,13 +238,13 @@ app.put('/user/admin/:email',verifyJWT, async(req,res)=>{
       //   res.send(profil)
       //  })
 
-       app.get('/myprofil/:id', async(req,res)=>{
-        const id = req.params.id 
-        const query = {_id: ObjectId(id)}
-        const result =await myProfilCollection.findOne(query) 
-        res.send(result)
+    //    app.get('/myprofil/:id', async(req,res)=>{
+    //     const id = req.params.id 
+    //     const query = {_id: ObjectId(id)}
+    //     const result =await myProfilCollection.findOne(query) 
+    //     res.send(result)
 
-    })
+    // })
 
     } 
     
