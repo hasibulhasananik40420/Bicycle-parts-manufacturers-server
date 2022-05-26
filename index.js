@@ -235,19 +235,6 @@ app.put('/user/admin/:email',verifyJWT, async(req,res)=>{
 
 
 
-      //  app.get('/myprofil', async(req,res)=>{
-      //   const profil = await myProfilCollection.find().toArray() 
-      //   res.send(profil)
-      //  })
-
-    //    app.get('/myprofil/:id', async(req,res)=>{
-    //     const id = req.params.id 
-    //     const query = {_id: ObjectId(id)}
-    //     const result =await myProfilCollection.findOne(query) 
-    //     res.send(result)
-
-    // })
-
 
     app.put('/myprofil/:email', async (req, res) => {
       const email = req.params.email
