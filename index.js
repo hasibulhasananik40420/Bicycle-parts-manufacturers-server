@@ -40,6 +40,7 @@ async function run() {
       const userCollection = client.db("users").collection("user")
       const myProfilCollection = client.db("users").collection("myprofil")
       const orderCollection = client.db("users").collection("order")
+      const paymentCollection = client.db("users").collection("payment")
       console.log('db cnnected');
 
        
@@ -112,6 +113,23 @@ async function run() {
          res.send(result)
        })
 
+
+       //save transitaion id by payment 
+       app.patch('/orders/:id', verifyJWT, async(req,res)=>{
+         const id = req.params.id 
+         const payment = req.body 
+         const filter = {_id: ObjectId(id)} 
+         const updateDoc = {
+           $set: {
+              paid: true ,
+              transactionId : payment.transactionId ,
+
+           }
+         }
+         const updateOrder = await orderCollection.updateOne(filter , updateDoc) 
+         const result = await paymentCollection.insertOne(payment) 
+         res.send(updateDoc)
+       })
 
         //delete my order
       app.delete('/myorders/:id',verifyJWT, async(req,res)=>{
