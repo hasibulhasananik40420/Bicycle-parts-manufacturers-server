@@ -59,8 +59,6 @@ async function run() {
 
       //all products
       app.get('/products' , async(req,res)=>{
-          // const products = await  productsCollection.find().toArray()
-          // res.send(products)
 
           const query = {};
             const cursor = productsCollection.find(query);
@@ -236,7 +234,11 @@ app.put('/user/admin/:email',verifyJWT, async(req,res)=>{
        res.send(result)
      })
 
-  
+       app.get('/myprofil', async(req,res)=>{
+        const profil = await myProfilCollection.find().toArray() 
+        res.send(profil)
+       })
+
     } 
     
     finally {
