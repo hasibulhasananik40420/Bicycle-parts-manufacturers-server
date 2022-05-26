@@ -6,7 +6,7 @@ require('dotenv').config()
 const port = process.env.PORT || 5000
 app.use(cors())
 app.use(express.json())
-
+const stripe = require('stripe')(process.env.STRIPE_KEY)
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -69,6 +69,19 @@ async function run() {
           res.send(result)
         })
   
+
+        //payment 
+        app.post('/create-payment-intent',verifyJWT , async(req,res)=>{
+          const service = req.body 
+          const price = service.price 
+          const amount = price*100 
+          const paymentIntent = await stripe.paymentIntents.create({
+            amount : amount,
+            currency: 'usd',
+            payment_method_types:['card']
+          })
+          res.send({clientSecret: paymentIntent.client_secret})
+        })
 
        // sent order to server
        app.post('/orders', async(req,res)=>{
